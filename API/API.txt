@@ -1,0 +1,141 @@
+swagger: '2.0'
+info:
+  title: Shop WS
+  description: A web services that manages the warehouse of a shop
+  version: "1.0.0"
+host: myserver.it
+schemes:
+  - https
+basePath: /
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  /:
+    get:
+      summary: home page
+      description: it returns the home page of the service
+      responses:
+        200:
+          description: welcome page
+          
+  /searchItem:
+    post:
+      summary: search for items
+      description: it returns a list of items that match the criteria
+      parameters:
+        - name: ID
+          in: formData
+          description: ID of the item
+          required: false
+          type: string
+        - name: size
+          in: formData
+          description: size of the item
+          required: false
+          type: string
+        - name: colour
+          in: formData
+          description: colour of the item
+          required: false
+          type: string
+      responses:
+        200:
+          description: list of items found
+          schema: 
+            type: array
+            items:
+              $ref: "#/definitions/item"
+        406:
+          description: ID of error
+          schema: 
+            properties:
+              error:
+                type: integer
+        404:
+          description: no items that match the criteria
+          
+  /sellItem:
+    post:
+      summary: sell an item
+      description: it returns the item sold, reduce the quantity in warehouse by 1
+      parameters:
+        - name: ID
+          in: formData
+          description: ID of the item
+          required: false
+          type: string
+        - name: size
+          in: formData
+          description: size of the item
+          required: false
+          type: string
+        - name: colour
+          in: formData
+          description: colour of the item
+          required: false
+          type: string
+      responses:
+        200:
+          description: object of the sold item
+          schema: 
+              $ref: "#/definitions/item"
+        406:
+          description: ID of error
+          schema: 
+            properties:
+              error:
+                type: integer
+        404:
+          description: no items found with specified criteria
+            
+  /sales:
+    post:
+      summary: returns items on sale and update the databse with new prices
+      description: update the items that match "year" criteria reducing the price by the specified percentage specified in "discount" and returns the updated elements
+      parameters:
+        - name: year
+          in: formData
+          description: season of the items to discount
+          required: true
+          type: integer
+        - name: discount
+          in: formData
+          description: percentage to discount
+          required: true
+          type: integer
+      responses:
+        200:
+          description: list of items modified
+          schema: 
+            type: array
+            items:
+              $ref: "#/definitions/item"
+          
+definitions:
+  item:
+    properties:
+      ID:
+        type: string
+        description: ID of the pizza
+      type:
+        type: string
+        description: name of the pizza
+      size:
+        type: integer
+        description: price of the pizza
+      quantity:
+        type: integer
+        description: price of the pizza
+      colour:
+        type: string
+        description: name of the pizza
+      price:
+        type: integer
+        description: price of the pizza
+      season:
+        type: integer
+        description: price of the pizza
+
+        
